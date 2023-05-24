@@ -4,6 +4,7 @@ This repository contains an implementation of MobileNetV3, a lightweight deep le
 1. Clone the repository:
  git clone https://github.com/xiaolai-sqlai/mobilenetv3.git
 2. Install the required dependencies:
+pip install -r requirements.txt
 # Usage
 Load a pretrained MobileNetV3:
 
