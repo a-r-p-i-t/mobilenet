@@ -2,3 +2,4 @@ python=3.10
 torch==2.0.0+cpu --index-url https://download.pytorch.org/whl/cpu
 numpy==1.23
 torchvision==0.15.1+cu117
+Install Pytorch(cuda)==pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
