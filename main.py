@@ -22,7 +22,7 @@ from timm.data.mixup import Mixup
 from timm.loss import LabelSmoothingCrossEntropy, SoftTargetCrossEntropy
 from timm.utils import ModelEma
 from optim_factory import create_optimizer, LayerDecayValueAssigner
-from mobilenetv3 import MobileNetV3_Small,MobileNetV3_Large
+from torchvision.models import mobilenet_v3_small,mobilenet_v3_large
 
 from datasets import build_dataset
 from engine import train_one_epoch, evaluate
@@ -151,15 +151,15 @@ def get_args_parser():
     parser.add_argument('--imagenet_default_mean_and_std', type=str2bool, default=True)
     parser.add_argument('--data_set', default='custom_dataset',
                         type=str, help='custom_dataset')
-    parser.add_argument('--output_dir', default='C:\\Users\\Arpit Mohanty\\mobnet\\output',
+    parser.add_argument('--output_dir', default='C:\\Users\\Arpit Mohanty\\mobnet\\data\\output',
                         help='path where to save, empty for no saving')
-    parser.add_argument('--log_dir', default="C:\\Users\\Arpit Mohanty\\mobnet\\logdir",
+    parser.add_argument('--log_dir', default="C:\\Users\\Arpit Mohanty\\mobnet\\data\\logdir",
                         help='path where to tensorboard log')
     parser.add_argument('--device', default='cuda',
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=0, type=int)
 
-    parser.add_argument('--resume', default='C:\\Users\\Arpit Mohanty\\mobnet\\output\\checkpoint-99.pth',
+    parser.add_argument('--resume', default="",
                         help='resume from checkpoint')
     parser.add_argument('--auto_resume', type=str2bool, default=True)
     parser.add_argument('--save_ckpt', type=str2bool, default=True)
@@ -270,9 +270,9 @@ def main(args):
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
 
     if args.model == "mobilenet_v3_small":
-        model = MobileNetV3_Small()
+        model = mobilenet_v3_small(pretrained=True)
     elif args.model == "mobilenet_v3_large":
-        model = MobileNetV3_Large()
+        model = mobilenet_v3_large(pretrained=True)
 
     if args.finetune:
         if args.finetune.startswith('https'):
