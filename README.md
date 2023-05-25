@@ -9,7 +9,46 @@ This repository contains an implementation of MobileNetV3, a lightweight deep le
 # Usage
 Load a pretrained MobileNetV3:
 
-from mobilenetv3 import MobileNetV3_Small,MobileNetV3_Large
+from torchvision.models import mobilenet_v3_small,mobilenet_v3_large
 
-model = MobileNetV3_Small()
+model = mobilenet_v3_small(pretrained=True)
+
+Data Loading:
+
+The folder structure looks as :
+Main Directory
+- Train
+  - Sub1
+    - img1
+    - img2
+  - Sub2
+    - img3
+    - img4
+- Val
+  - Sub1
+    - img5
+    - img6
+  - Sub2
+    - img7
+    - img8
+
+
+            
+   
+root = "path/of/root/directory"
+
+train_folder = os.path.join(root, "train")
+
+val_folder = os.path.join(root, "val")
+
+Training Parameters:Model,Batch Size,num_epochs,weight_decay,learning_rate,data_loader
+
+Validation Parameters: Model,Batch Size,num_epochs,data_loader
+
+
+Run:
+
+python main.py
+
+
 
