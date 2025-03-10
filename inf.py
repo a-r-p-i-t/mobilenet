@@ -41,17 +41,17 @@ test_transforms = transforms.Compose([
 
 
 # Set the paths for the test folder, the pre-trained model checkpoint, and the output folder for misidentified images
-test_folder = "C:\\Users\\Arpit Mohanty\\ic\\data\\test"
-output_folder = "C:\\Users\\Arpit Mohanty\\ic\\data\\outputs"
+test_folder = "C:\\Users\\Arpit Mohanty\\Desktop\\mobilenet_classification\\mobilenet\\test"
+output_folder = "C:\\Users\\Arpit Mohanty\\Desktop\\mobilenet_classification\\mobilenet\\results"
 
 # Set the device for running the inference
 device = torch.device("cuda:0")
 
 # Load the pre-trained model
 model = models.mobilenet_v3_small()
-checkpoint = torch.load('C:\\Users\\Arpit Mohanty\\mobnet\\data\\output\\checkpoint-best.pth',map_location=torch.device("cuda"))
+checkpoint = torch.load('C:\\Users\\Arpit Mohanty\\Desktop\\mobilenet_classification\\mobilenet\\output\\checkpoint-best.pth',map_location=torch.device("cuda"))
 state_dict = checkpoint['model']
-model_path = "C:\\Users\\Arpit Mohanty\\mobnet\\output\\checkpoint-best.pth"
+model_path = "C:\\Users\\Arpit Mohanty\\Desktop\\mobilenet_classification\\mobilenet\\output\\checkpoint-best.pth"
 
 # Get the size of the file in bytes
 model_size_bytes = os.path.getsize(model_path)
@@ -69,7 +69,7 @@ model.to(device)
 model.eval()
 
 # Define the class names and the tags for misidentified images
-class_names = ["empty", "filled"]
+class_names = ["cats", "dogs"]
 tag = "misidentified"
 
 # Create the output folder for misidentified images if it doesn't exist
@@ -92,6 +92,8 @@ num_images = len(image_filenames)
 start_time1=time.time()
 results=[]
 for image_filename in image_filenames:
+    img_name = os.path.basename(image_filename)
+    print(img_name)
     count1+=1
     # Load the image and apply the transforms
     image = Image.open(os.path.join(test_folder, image_filename))
@@ -112,13 +114,18 @@ for image_filename in image_filenames:
     
     # Append the predicted and true labels to their respective lists
     predicted_labels.append(predicted_label)
-    true_label = 0 if "empty" in image_filename else 1
+    # true_label = 0 if "cat" in image_filename else 1
+    if "cat" in img_name:
+        true_label = 0
+    elif "dog" in img_name:
+        true_label = 1
     true_labels.append(true_label)
+    
     
     # If the predicted label is incorrect, move the image to the output folder and tag it
     if predicted_label != true_label:
         count+=1
-        output_filename = os.path.join(output_folder, f"{os.path.basename(image_filename).split('.')[0]}_{tag}.jpg")
+        output_filename = os.path.join(output_folder, f"{os.path.basename(image_filename).split('.')[0]}_{tag}_{count}.jpg")
         shutil.copy(image_filename, output_filename)
         img = Image.open(os.path.join(output_folder, output_filename))
         draw = ImageDraw.Draw(img)
@@ -129,6 +136,9 @@ for image_filename in image_filenames:
     total_inference_time += inference_time
        
 end_time1=time.time()
+
+print(true_labels)
+print(predicted_labels)
 
 # Convert the predicted and true labels to NumPy arrays
 predicted_labels = np.array(predicted_labels)
